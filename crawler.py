@@ -34,19 +34,20 @@ def update_position(level, col, row, player_input):
         new_column = col
         new_row = row
 
-    if collision_check(level, new_column, new_row):
-        return new_column, new_row
-    else:
+    try:
+        if collision_check(level, new_column, new_row):
+            return new_column, new_row
+        else:
+            return col, row
+    except IndexError:
         return col, row
 
+
 def update_map(level, col, row):
-    try:
-        for current_row in level:
-            if 'P' in current_row:
-                old_col = current_row.index('P')
-                current_row[old_col] = ' '
-    except ValueError:
-        pass
+    for current_row in level:
+        if 'P' in current_row:
+            old_col = current_row.index('P')
+            current_row[old_col] = ' '
     level[row][col] = 'P'
     return level
 
