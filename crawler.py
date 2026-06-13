@@ -9,10 +9,19 @@ template_map = [
 
 
 # Function to check if new position is within bounds
-def collision_check(level, col, row):
-    return level[row][col] != '#'
+def collision_check(level, col, row, has_key):
+    tile = level[row][col]
 
-def update_position(level, col, row, player_input):
+    if tile == '#':
+        return False
+
+    if tile == 'D' and not has_key:
+        print("Key Required!")
+        return False
+
+    return True
+
+def update_position(level, col, row, player_input, has_key):
     player_input = player_input.lower()
     if player_input == 'a':
         new_column = col - 1
@@ -31,21 +40,12 @@ def update_position(level, col, row, player_input):
         new_row = row
 
     try:
-        if collision_check(level, new_column, new_row):
+        if collision_check(level, new_column, new_row, has_key):
             return new_column, new_row
         else:
             return col, row
     except IndexError:
         return col, row
-
-
-def update_map(level, col, row):
-    for current_row in level:
-        if 'P' in current_row:
-            old_col = current_row.index('P')
-            current_row[old_col] = ' '
-    level[row][col] = 'P'
-    return level
 
 
 def draw_map(level, player_col, player_row):
@@ -62,27 +62,28 @@ def draw_map(level, player_col, player_row):
 
 def handle_tile_effect(level, col, row, has_key, health):
     tile = level[row][col]
+    level_complete = False
 
     if tile == 'K':
         print('Picked up the key')
         has_key = True
         level[row][col] = ' '
 
-    if tile == 'D' and has_key:
+    elif tile == 'D' and has_key:
         print("Level complete!")
+        level_complete = True
 
-    if tile == 'D' and not has_key:
-        print('Key required!')
-
-    if tile == 'E':
+    elif tile == 'E':
         health -= 1
         if health <= 0:
             print('You died')
-            return has_key, False
+            health = 0
+            return has_key, health
         else:
             print('Took damage from enemy')
+            level[row][col] = ' '
 
-    return has_key, health
+    return has_key, health, level_complete
 
 def display_info(health, has_key):
     print('W/A/S/D to move, Q to quit')
@@ -98,6 +99,7 @@ player_key = False
 player_health = 10
 
 
+
 while True:
     try:
         display_info(player_health, player_key)
@@ -105,11 +107,9 @@ while True:
         next_input = input()
         if next_input.lower() == 'q':
             break
-        player_column, player_row = update_position(template_map, player_column, player_row, next_input)
-        player_key, player_health = handle_tile_effect(template_map, player_column, player_row, player_key, player_health)
-        if not player_health:
-            break
-        if template_map[player_row][player_column] == 'D' and player_key:
+        player_column, player_row = update_position(template_map, player_column, player_row, next_input, player_key)
+        player_key, player_health, level_complete = handle_tile_effect(template_map, player_column, player_row, player_key, player_health)
+        if player_health <= 0 or level_complete:
             break
 
 
