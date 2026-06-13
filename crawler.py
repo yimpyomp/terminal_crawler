@@ -1,16 +1,12 @@
 template_map = [
     ['#', '#', '#', '#', '#', '#', '#', '#', '#', '#'],
     ['#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'],
-    ['#', ' ', ' ', ' ', 'P', ' ', ' ', ' ', ' ', 'D'],
-    ['#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'],
+    ['#', ' ', ' ', ' ', ' ', ' ', ' ', 'E', ' ', 'D'],
+    ['#', ' ', 'K', ' ', ' ', ' ', ' ', ' ', ' ', '#'],
     ['#', '#', '#', '#', '#', '#', '#', '#', '#', '#']
 ]
 # Bounds are 1-8 horizontally (columns), 1-3 vertically (rows)
 
-player_row = 2
-player_column = 4
-
-game_running = True
 
 # Function to check if new position is within bounds
 def collision_check(level, col, row):
@@ -51,25 +47,71 @@ def update_map(level, col, row):
     level[row][col] = 'P'
     return level
 
-def draw_map(level):
-    for row in level:
-        print(''.join(row))
+
+def draw_map(level, player_col, player_row):
+    for row_index, row in enumerate(level):
+        display_row = ''
+
+        for column_index, tile in enumerate(row):
+            if (row_index == player_row) and (column_index == player_col):
+                display_row += 'P'
+            else:
+                display_row += tile
+        print(display_row)
+
+
+def handle_tile_effect(level, col, row, has_key, health):
+    tile = level[row][col]
+
+    if tile == 'K':
+        print('Picked up the key')
+        has_key = True
+        level[row][col] = ' '
+
+    if tile == 'D' and has_key:
+        print("Level complete!")
+
+    if tile == 'D' and not has_key:
+        print('Key required!')
+
+    if tile == 'E':
+        health -= 1
+        if health <= 0:
+            print('You died')
+            return has_key, False
+        else:
+            print('Took damage from enemy')
+
+    return has_key, health
+
+def display_info(health, has_key):
+    print('W/A/S/D to move, Q to quit')
+    print(f'Has Key: {has_key}')
+    print(f'Health: {health}')
     return None
 
-def check_level_completion(level, row, col):
-    if level[row][col] == 'D':
-        print('Level complete!')
-    game_running = False
+
+# Basic debug initializations
+player_row = 2
+player_column = 4
+player_key = False
+player_health = 10
 
 
-
-while game_running:
+while True:
     try:
-        draw_map(template_map)
+        display_info(player_health, player_key)
+        draw_map(template_map, player_column, player_row)
         next_input = input()
+        if next_input.lower() == 'q':
+            break
         player_column, player_row = update_position(template_map, player_column, player_row, next_input)
-        check_level_completion(template_map, player_row, player_column)
-        template_map = update_map(template_map, player_column, player_row)
+        player_key, player_health = handle_tile_effect(template_map, player_column, player_row, player_key, player_health)
+        if not player_health:
+            break
+        if template_map[player_row][player_column] == 'D' and player_key:
+            break
+
 
     except KeyboardInterrupt:
         quit()
