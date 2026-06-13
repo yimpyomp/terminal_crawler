@@ -6,16 +6,19 @@ template_map = [
     ['#', '#', '#', '#', '#', '#', '#', '#', '#', '#']
 ]
 
-movements = {'w': (-1, 0),
+MOVEMENTS = {'w': (-1, 0),
              's': (1, 0),
              'a': (0, -1),
              'd': (0, 1)}
 
-# Bounds are 1-8 horizontally (columns), 1-3 vertically (rows)
+def in_bounds(level, row, col):
+    return 0 <= row < len(level) and 0 <= col < len(level[row])
 
-#change this
-# Function to check if new position is within bounds
+
 def collision_check(level, row, col, has_key):
+    if not in_bounds(level, row, col):
+        return False
+
     tile = level[row][col]
 
     if tile == '#':
@@ -30,17 +33,17 @@ def collision_check(level, row, col, has_key):
 
 def update_position(level, row, col, player_input, has_key):
     player_input = player_input.lower()
-
-    new_row = row + movements[player_input][0]
-    new_column = col + movements[player_input][1]
-
-    try:
-        if collision_check(level, new_row, new_column, has_key):
-            return new_row, new_column
-        else:
-            return row, col
-    except IndexError:
+    if player_input not in MOVEMENTS:
         return row, col
+
+    new_row = row + MOVEMENTS[player_input][0]
+    new_column = col + MOVEMENTS[player_input][1]
+
+    if collision_check(level, new_row, new_column, has_key):
+        return new_row, new_column
+
+    return row, col
+
 
 
 def draw_map(level, player_row, player_col):
@@ -75,7 +78,7 @@ def handle_tile_effect(level, row, col, has_key, health):
             print('You died')
             health = 0
             level[row][col] = ' '
-            return has_key, health, level_complete
+
         else:
             print('Took damage from enemy')
             level[row][col] = ' '
@@ -86,7 +89,7 @@ def display_info(health, has_key):
     print('W/A/S/D to move, Q to quit')
     print(f'Has Key: {has_key}')
     print(f'Health: {health}')
-    return None
+
 
 
 # Basic debug initializations
@@ -95,8 +98,6 @@ player_column = 4
 player_key = False
 player_health = 10
 
-
-
 while True:
     try:
         display_info(player_health, player_key)
@@ -104,7 +105,7 @@ while True:
         next_input = input()
         if next_input.lower() == 'q':
             break
-        player_row, player_column= update_position(template_map, player_row, player_column, next_input, player_key)
+        player_row, player_column = update_position(template_map, player_row, player_column, next_input, player_key)
         player_key, player_health, level_complete = handle_tile_effect(template_map, player_row, player_column, player_key, player_health)
         if player_health <= 0 or level_complete:
             break
