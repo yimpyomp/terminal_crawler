@@ -7,7 +7,7 @@ from map_tools import display_info, draw_map, update_position, handle_tile_effec
 def main():
     level_index = 0
     level = copy.deepcopy(LEVELS[level_index])
-    level, start_row, start_col = find_start_tile(level)
+    level, start_row, start_col = load_level(level)
     player = Player(row=start_row, col=start_col, health=10)
 
     while True:
