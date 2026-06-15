@@ -12,7 +12,7 @@ def main():
 
     while True:
         try:
-            display_info(player)
+            display_info(player, level_index)
             draw_map(level, player)
             next_input = input()
 
