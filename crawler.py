@@ -57,31 +57,31 @@ def draw_map(level, player):
 
 
 
-def handle_tile_effect(level, row, col, has_key, health):
-    tile = level[row][col]
+def handle_tile_effect(level, player):
+    tile = level[player.row][player.col]
     level_complete = False
 
     if tile == 'K':
         print('Picked up the key')
-        has_key = True
-        level[row][col] = ' '
+        player.pick_up_key()
+        level[player.row][player.col] = ' '
 
-    elif tile == 'D' and has_key:
+    elif tile == 'D' and player.key:
         print("Level complete!")
         level_complete = True
 
     elif tile == 'E':
-        health -= 1
-        if health <= 0:
+        player.take_damage(1)
+        if not player.is_alive():
             print('You died')
-            health = 0
-            level[row][col] = ' '
+            player.health = 0
+            level[player.row][player.col] = ' '
 
         else:
             print('Took damage from enemy')
-            level[row][col] = ' '
+            level[player.row][player.col] = ' '
 
-    return has_key, health, level_complete
+    return level_complete
 
 def display_info(health, has_key):
     print('W/A/S/D to move, Q to quit')
@@ -124,8 +124,7 @@ while True:
         if next_input.lower() == 'q':
             break
         update_position(template_map, player, next_input)
-        player.key, player.health, level_complete = handle_tile_effect(template_map, player.row,
-                                                                       player.col, player.key, player.health)
+        level_complete = handle_tile_effect(template_map, player)
         if not player.is_alive() or level_complete:
             break
 
