@@ -77,8 +77,8 @@ def handle_tile_effect(level, player):
 
     return level_complete
 
-def display_info(player):
-    print('W/A/S/D to move, Q to quit')
+def display_info(player, level_index):
+    print(f'W/A/S/D to move, Q to quit || Level {level_index + 1}')
     print(f'Has Key: {player.has_key}')
     print(f'Health: {player.health}')
 
