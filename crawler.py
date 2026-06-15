@@ -114,27 +114,26 @@ class Player:
         self.col = col
 
 
-player = Player(row=2, col=4, health=10)
+def main():
+    player = Player(row=2, col=4, health=10)
 
-while True:
-    try:
-        display_info(player.health, player.key)
-        draw_map(template_map, player)
-        next_input = input()
-        if next_input.lower() == 'q':
-            break
-        update_position(template_map, player, next_input)
-        level_complete = handle_tile_effect(template_map, player)
-        if not player.is_alive() or level_complete:
-            break
-
-
-    except KeyboardInterrupt:
-        quit()
+    while True:
+        try:
+            display_info(player.health, player.key)
+            draw_map(template_map, player)
+            next_input = input()
+            if next_input.lower() == 'q':
+                break
+            update_position(template_map, player, next_input)
+            level_complete = handle_tile_effect(template_map, player)
+            if not player.is_alive() or level_complete:
+                break
 
 
+        except KeyboardInterrupt:
+            quit()
 
 
-
-
+if __name__ == "__main__":
+    main()
 
