@@ -34,12 +34,15 @@ def collision_check(level, row, col, has_key):
 def update_position(level, player, player_input):
     player_input = player_input.lower()
     if player_input not in MOVEMENTS:
-        pass
+        return
 
-    new_row = player.row + MOVEMENTS[player_input][0]
-    new_col = player.col + MOVEMENTS[player_input][1]
+    row_change, col_change = MOVEMENTS[player_input]
 
-    if collision_check(level, new_row, new_col, player.key):
+    new_row = player.row + row_change
+    new_col = player.col + col_change
+
+
+    if collision_check(level, new_row, new_col, player.has_key):
         player.move_player(new_row, new_col)
 
 
@@ -66,45 +69,44 @@ def handle_tile_effect(level, player):
         player.pick_up_key()
         level[player.row][player.col] = ' '
 
-    elif tile == 'D' and player.key:
+    elif tile == 'D' and player.has_key:
         print("Level complete!")
         level_complete = True
 
     elif tile == 'E':
         player.take_damage(1)
+        level[player.row][player.col] = ' '
+
         if not player.is_alive():
             print('You died')
-            player.health = 0
-            level[player.row][player.col] = ' '
 
         else:
             print('Took damage from enemy')
-            level[player.row][player.col] = ' '
 
     return level_complete
 
-def display_info(health, has_key):
+def display_info(player):
     print('W/A/S/D to move, Q to quit')
-    print(f'Has Key: {has_key}')
-    print(f'Health: {health}')
+    print(f'Has Key: {player.has_key}')
+    print(f'Health: {player.health}')
 
 
 class Player:
     def __init__(self, row, col, health=10):
         self.row = row
         self.col = col
-        self.key = False
+        self.has_key = False
         self.health = health
         self.symbol = 'P'
 
-    def take_damage(self, amount):
+    def take_damage(self, amount=1):
         self.health -= amount
 
         if self.health < 0:
             self.health = 0
 
     def pick_up_key(self):
-        self.key = True
+        self.has_key = True
 
     def is_alive(self):
         return self.health > 0
@@ -119,7 +121,7 @@ def main():
 
     while True:
         try:
-            display_info(player.health, player.key)
+            display_info(player.health, player.has_key)
             draw_map(template_map, player)
             next_input = input()
             if next_input.lower() == 'q':
