@@ -32,8 +32,7 @@ def main():
                     print("All levels complete!")
                     break
 
-                level = copy.deepcopy(LEVELS[level_index])
-                start_row, start_col = find_start_tile(level)
+                level, start_row, start_col = load_level(level)
                 player.move_player(row=start_row, col=start_col)
                 player.has_key = False
 
