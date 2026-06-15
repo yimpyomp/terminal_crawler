@@ -31,18 +31,16 @@ def collision_check(level, row, col, has_key):
     return True
 
 
-def update_position(level, row, col, player_input, has_key):
+def update_position(level, player, player_input):
     player_input = player_input.lower()
     if player_input not in MOVEMENTS:
-        return row, col
+        pass
 
-    new_row = row + MOVEMENTS[player_input][0]
-    new_column = col + MOVEMENTS[player_input][1]
+    new_row = player.row + MOVEMENTS[player_input][0]
+    new_col = player.col + MOVEMENTS[player_input][1]
 
-    if collision_check(level, new_row, new_column, has_key):
-        return new_row, new_column
-
-    return row, col
+    if collision_check(level, new_row, new_col, player.key):
+        player.move_player(new_row, new_col)
 
 
 
@@ -125,7 +123,7 @@ while True:
         next_input = input()
         if next_input.lower() == 'q':
             break
-        player.move_player(*update_position(template_map, player.row, player.col, next_input, player.key))
+        update_position(template_map, player, next_input)
         player.key, player.health, level_complete = handle_tile_effect(template_map, player.row,
                                                                        player.col, player.key, player.health)
         if not player.is_alive() or level_complete:
