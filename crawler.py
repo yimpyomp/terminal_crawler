@@ -2,12 +2,13 @@ import copy
 
 from player import Player
 from levels import LEVELS
-from map_tools import display_info, draw_map, update_position, handle_tile_effect
+from map_tools import display_info, draw_map, update_position, handle_tile_effect, find_start_tile, load_level
 
 def main():
-    player = Player(row=2, col=4, health=10)
     level_index = 0
     level = copy.deepcopy(LEVELS[level_index])
+    level, start_row, start_col = find_start_tile(level)
+    player = Player(row=start_row, col=start_col, health=10)
 
     while True:
         try:
@@ -32,7 +33,8 @@ def main():
                     break
 
                 level = copy.deepcopy(LEVELS[level_index])
-                player.move_player(row=2, col=2)
+                start_row, start_col = find_start_tile(level)
+                player.move_player(row=start_row, col=start_col)
                 player.has_key = False
 
 

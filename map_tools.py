@@ -81,3 +81,20 @@ def display_info(player):
     print('W/A/S/D to move, Q to quit')
     print(f'Has Key: {player.has_key}')
     print(f'Health: {player.health}')
+
+
+def find_start_tile(level):
+    for row_number, row in enumerate(level):
+        for col_number, col in enumerate(row):
+            if col == 'S':
+                start_row, start_col = row_number, col_number
+                level[row_number][col_number] = ' '
+                return start_row, start_col
+
+    raise ValueError('No starting position found')
+
+
+def load_level(level_template):
+    level = [list(row) for row in level_template]
+    start_row, start_col = find_start_tile(level)
+    return level, start_row, start_col
