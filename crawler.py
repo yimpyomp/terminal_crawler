@@ -32,7 +32,7 @@ def main():
                     print("All levels complete!")
                     break
 
-                level, start_row, start_col = load_level(level)
+                level, start_row, start_col = load_level(LEVELS[level_index])
                 player.move_player(row=start_row, col=start_col)
                 player.has_key = False
 
