@@ -46,13 +46,13 @@ def update_position(level, row, col, player_input, has_key):
 
 
 
-def draw_map(level, player_row, player_col):
+def draw_map(level, player):
     for row_index, row in enumerate(level):
         display_row = ''
 
         for column_index, tile in enumerate(row):
-            if (row_index == player_row) and (column_index == player_col):
-                display_row += 'P'
+            if (row_index == player.row) and (column_index == player.col):
+                display_row += player.symbol
             else:
                 display_row += tile
         print(display_row)
@@ -91,23 +91,44 @@ def display_info(health, has_key):
     print(f'Health: {health}')
 
 
+class Player:
+    def __init__(self, row, col, health=10):
+        self.row = row
+        self.col = col
+        self.key = False
+        self.health = health
+        self.symbol = 'P'
 
-# Basic debug initializations
-player_row = 2
-player_column = 4
-player_key = False
-player_health = 10
+    def take_damage(self, amount):
+        self.health -= amount
+
+        if self.health < 0:
+            self.health = 0
+
+    def pick_up_key(self):
+        self.key = True
+
+    def is_alive(self):
+        return self.health > 0
+
+    def move_player(self, row, col):
+        self.row = row
+        self.col = col
+
+
+player = Player(row=2, col=4, health=10)
 
 while True:
     try:
-        display_info(player_health, player_key)
-        draw_map(template_map, player_row, player_column)
+        display_info(player.health, player.key)
+        draw_map(template_map, player)
         next_input = input()
         if next_input.lower() == 'q':
             break
-        player_row, player_column = update_position(template_map, player_row, player_column, next_input, player_key)
-        player_key, player_health, level_complete = handle_tile_effect(template_map, player_row, player_column, player_key, player_health)
-        if player_health <= 0 or level_complete:
+        player.move_player(*update_position(template_map, player.row, player.col, next_input, player.key))
+        player.key, player.health, level_complete = handle_tile_effect(template_map, player.row,
+                                                                       player.col, player.key, player.health)
+        if not player.is_alive() or level_complete:
             break
 
 
