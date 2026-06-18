@@ -34,8 +34,11 @@ def main(screen):
             message = "Invalid input"
             continue
 
-        update_position(level, player, player_input)
-        level_complete, message = handle_tile_effect(level, player)
+        message = update_position(level, player, player_input)
+        level_complete, tile_message = handle_tile_effect(level, player)
+
+        if tile_message != '':
+            message = tile_message
 
         if not player.is_alive():
             break
@@ -45,7 +48,7 @@ def main(screen):
 
             if level_index >= len(LEVELS):
                 message = "All levels complete!"
-                draw_screen(screen, level, level_index, player, message)
+                draw_screen(screen, level, level_index - 1, player, message)
                 screen.getch()
                 break
 

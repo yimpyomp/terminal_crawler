@@ -7,6 +7,9 @@ def in_bounds(level, row, col):
     return 0 <= row < len(level) and 0 <= col < len(level[row])
 
 
+def is_door_tile(level, row, col):
+    return level[row][col] == 'D'
+
 def collision_check(level, row, col, has_key):
     if not in_bounds(level, row, col):
         return False
@@ -27,23 +30,17 @@ def update_position(level, player, player_input):
 
     new_row = player.row + row_change
     new_col = player.col + col_change
-
+    message = ''
 
     if collision_check(level, new_row, new_col, player.has_key):
         player.move_player(new_row, new_col)
 
+    else:
+        if is_door_tile(level, new_row, new_col):
+            message = "Key required"
 
+    return message
 
-def draw_map(level, player):
-    for row_index, row in enumerate(level):
-        display_row = ''
-
-        for column_index, tile in enumerate(row):
-            if (row_index == player.row) and (column_index == player.col):
-                display_row += player.symbol
-            else:
-                display_row += tile
-        print(display_row)
 
 
 
