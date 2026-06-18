@@ -36,7 +36,7 @@ def update_position(level, player, player_input):
         player.move_player(new_row, new_col)
 
     else:
-        if is_door_tile(level, new_row, new_col):
+        if is_door_tile(level, new_row, new_col) and in_bounds(level, new_row, new_col):
             message = "Key required"
 
     return message
