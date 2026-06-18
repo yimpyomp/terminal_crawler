@@ -17,17 +17,12 @@ def collision_check(level, row, col, has_key):
         return False
 
     if tile == 'D' and not has_key:
-        print("Key Required!")
         return False
 
     return True
 
 
 def update_position(level, player, player_input):
-    player_input = player_input.lower()
-    if player_input not in MOVEMENTS:
-        return
-
     row_change, col_change = MOVEMENTS[player_input]
 
     new_row = player.row + row_change
@@ -55,14 +50,15 @@ def draw_map(level, player):
 def handle_tile_effect(level, player):
     tile = level[player.row][player.col]
     level_complete = False
+    message = ''
 
     if tile == 'K':
-        print('Picked up the key')
+        message = "Picked up the key"
         player.pick_up_key()
         level[player.row][player.col] = ' '
 
     elif tile == 'D' and player.has_key:
-        print("Level complete!")
+        message = "Level Complete!"
         level_complete = True
 
     elif tile == 'E':
@@ -70,17 +66,12 @@ def handle_tile_effect(level, player):
         level[player.row][player.col] = ' '
 
         if not player.is_alive():
-            print('You died')
+            message = "You Died"
 
         else:
-            print('Took damage from enemy')
+            message = "Took damage from enemy"
 
-    return level_complete
-
-def display_info(player, level_index):
-    print(f'W/A/S/D to move, Q to quit || Level {level_index + 1}')
-    print(f'Has Key: {player.has_key}')
-    print(f'Health: {player.health}')
+    return level_complete, message
 
 
 def find_start_tile(level):
