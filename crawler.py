@@ -7,46 +7,6 @@ from map_tools import update_position, handle_tile_effect, load_level, MOVEMENTS
 from display_tools import draw_screen
 
 
-'''
-def old_main():
-    level_index = 0
-    level = copy.deepcopy(LEVELS[level_index])
-    level, start_row, start_col = load_level(level)
-    player = Player(row=start_row, col=start_col, health=10)
-
-    while True:
-        try:
-            display_info(player, level_index)
-            draw_map(level, player)
-            next_input = input()
-
-            if next_input.lower() == 'q':
-                break
-
-            update_position(level, player, next_input)
-            level_complete = handle_tile_effect(level, player)
-
-            if not player.is_alive():
-                break
-
-            if level_complete:
-                level_index += 1
-
-                if level_index >= len(LEVELS):
-                    print("All levels complete!")
-                    break
-
-                level, start_row, start_col = load_level(LEVELS[level_index])
-                player.move_player(row=start_row, col=start_col)
-                player.has_key = False
-
-
-
-        except KeyboardInterrupt:
-            quit()
-'''
-
-
 def main(screen):
     curses.curs_set(0)
     level_index = 0
