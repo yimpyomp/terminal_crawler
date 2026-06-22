@@ -10,8 +10,7 @@ def main(screen):
     curses.curs_set(0)
     level_index = 0
     level = LEVELS[level_index]
-    level, start_row, start_col = load_level(level)
-    player = Player(row=start_row, col=start_col, health=10)
+    level, player = load_level(level)
     message = ''
 
     while True:
@@ -51,8 +50,7 @@ def main(screen):
                 screen.getch()
                 break
 
-            level, start_row, start_col = load_level(LEVELS[level_index])
-            player.move_player(row=start_row, col=start_col)
+            level, player = load_level(LEVELS[level_index])
             player.has_key = False
 
 

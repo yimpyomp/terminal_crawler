@@ -1,3 +1,5 @@
+from player import Player
+
 MOVEMENTS = {'w': (-1, 0),
              's': (1, 0),
              'a': (0, -1),
@@ -88,4 +90,5 @@ def find_start_tile(level):
 def load_level(level_template):
     level = [list(row) for row in level_template]
     start_row, start_col = find_start_tile(level)
-    return level, start_row, start_col
+    player = Player(row=start_row, col=start_col, health=10)
+    return level, player
