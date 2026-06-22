@@ -28,6 +28,11 @@ def main(screen):
         if player_input == 'q':
             break
 
+        if player_input == 'r':
+            level, player = load_level(LEVELS[level_index])
+            message = ''
+            continue
+
         if player_input not in MOVEMENTS:
             message = "Invalid input"
             continue
@@ -39,7 +44,8 @@ def main(screen):
             message = tile_message
 
         if not player.is_alive():
-            break
+            message = "Press Q to Quit or R to Restart"
+            continue
 
         if level_complete:
             level_index += 1
@@ -51,7 +57,6 @@ def main(screen):
                 break
 
             level, player = load_level(LEVELS[level_index])
-            player.has_key = False
 
 
 if __name__ == "__main__":
