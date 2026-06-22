@@ -1,4 +1,3 @@
-import copy
 import curses
 
 from player import Player
@@ -10,7 +9,7 @@ from display_tools import draw_screen
 def main(screen):
     curses.curs_set(0)
     level_index = 0
-    level = copy.deepcopy(LEVELS[level_index])
+    level = LEVELS[level_index]
     level, start_row, start_col = load_level(level)
     player = Player(row=start_row, col=start_col, health=10)
     message = ''
