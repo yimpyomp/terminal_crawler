@@ -55,6 +55,9 @@ def handle_tile_effect(level, player):
         level[player.row][player.col] = ' '
 
     elif tile == 'D' and player.has_key:
+        level[player.row][player.col] = ' '
+
+    elif tile == 'X':
         message = "Level Complete!"
         level_complete = True
 
