@@ -1,4 +1,5 @@
-INFO_TEXT = "W/A/S/D to move, Q to quit || Level "
+CONTROL_TEXT = "W/A/S/D to move"
+GAMEPLAY_TEXT = "Q to quit, R to restart"
 HEADER_HEIGHT = 4
 MESSAGE_HEIGHT = 4
 SIDEBAR_WIDTH = 28
@@ -61,7 +62,13 @@ def draw_screen(screen, level, level_index, player, message):
     draw_map(screen, level, player, layout_positions["map_start_row"], layout_positions["map_start_col"])
     draw_header_info(screen, player, level_index, layout_positions)
     draw_message(screen, message, layout_positions)
+    draw_sidebar(screen, layout_positions)
     screen.refresh()
+
+
+def draw_sidebar(screen, layout_positions):
+    screen.addstr(layout_positions['sidebar_start_row'], layout_positions['sidebar_start_col'], CONTROL_TEXT)
+    screen.addstr(layout_positions['sidebar_start_row'] + 1, layout_positions['sidebar_start_col'], GAMEPLAY_TEXT)
 
 
 def build_horizontal_line(width):
