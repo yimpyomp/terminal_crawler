@@ -73,7 +73,6 @@ def handle_tile_effect(level, player):
         message = "Took damage from the tripwire!"
         level[player.row][player.col] = ' '
 
-
     elif tile == 'E':
         player.take_damage(1)
         level[player.row][player.col] = ' '
