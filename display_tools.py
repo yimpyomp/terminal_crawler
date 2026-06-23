@@ -14,7 +14,8 @@ STATIC_SIDEBAR_LINES = ["== Controls ==",
                  "K: key",
                  "E: Enemy",
                  "^: Spike Trap",
-                 "+: Health Pickup"
+                 "~: Tripwire",
+                 "+: Health Pickup",
                  "D: door",
                  "X: exit"]
 
