@@ -43,7 +43,7 @@ def main(screen):
             message = tile_message
 
         if not player.is_alive():
-            message = "Press Q to Quit or R to Restart"
+            message = "You Died! Press Q to Quit or R to Restart"
             continue
 
         if level_complete:

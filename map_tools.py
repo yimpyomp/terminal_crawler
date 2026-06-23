@@ -64,15 +64,14 @@ def handle_tile_effect(level, player):
         message = "Level Complete!"
         level_complete = True
 
+    elif tile == '^':
+        player.take_damage(1)
+        message = "Took damage from trap!"
+
     elif tile == 'E':
         player.take_damage(1)
         level[player.row][player.col] = ' '
-
-        if not player.is_alive():
-            message = "You Died!"
-
-        else:
-            message = "Took damage from enemy"
+        message = "Took damage from enemy!"
 
     return level_complete, message
 
