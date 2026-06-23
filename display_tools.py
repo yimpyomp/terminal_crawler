@@ -2,6 +2,8 @@ INFO_TEXT = "W/A/S/D to move, Q to quit || Level "
 HEADER_HEIGHT = 4
 MESSAGE_HEIGHT = 4
 SIDEBAR_WIDTH = 28
+CONTENT_START_COL = 1
+INFO_START_ROW = 1
 
 
 def draw_map(screen, level, player, header_divider):
@@ -15,17 +17,39 @@ def draw_map(screen, level, player, header_divider):
         screen.addstr(header_divider + row_number + 1, 1, display_line)
 
 
-def display_info(screen, player, level_index, message, message_divider):
-    screen.addstr(1, 1,INFO_TEXT + str(level_index + 1))
-    screen.addstr(2, 1, f"Has Key: {player.has_key} | Health: {player.health}")
-    screen.addstr(message_divider + 1, 1, message)
+def calculate_layout_positions(screen):
+    height, width = screen.getmaxyx()
+    header_divider = HEADER_HEIGHT - 1
+    message_divider = height - MESSAGE_HEIGHT
+    sidebar_divider = width - SIDEBAR_WIDTH
+    map_start_row = header_divider + 1
+    message_row = message_divider + 1
+    sidebar_start_col = sidebar_divider + 1
+    layout = {"height": height,
+              "width": width,
+              "header_divider": header_divider,
+              "message_divider": message_divider,
+              "sidebar_divider": sidebar_divider,
+              "map_start_row": map_start_row,
+              "message_start_row": message_row,
+              "sidebar_start_col": sidebar_start_col}
+    return layout
 
+
+def draw_info(screen, player, level_index, info_start_row):
+    screen.addstr(info_start_row, CONTENT_START_COL, INFO_TEXT + str(level_index + 1))
+    screen.addstr(info_start_row + 1, CONTENT_START_COL, f"Has Key: {player.has_key} | Health: {player.health}")
+
+def draw_message(screen, message, message_start_row):
+    screen.addstr(message_start_row, CONTENT_START_COL, message)
 
 def draw_screen(screen, level, level_index, player, message):
     screen.clear()
-    header_divider, message_divider = draw_layout(screen)
-    draw_map(screen, level, player, header_divider)
-    display_info(screen, player, level_index, message, message_divider)
+    layout_positions = calculate_layout_positions(screen)
+    draw_layout(screen)
+    draw_map(screen, level, player, layout_positions["header_divider"])
+    draw_info(screen, player, level_index, INFO_START_ROW)
+    draw_message(screen, message, layout_positions["message_start_row"])
     screen.refresh()
 
 
@@ -56,8 +80,6 @@ def draw_layout(screen):
     # Add the corner pieces for the sidebar
     screen.addstr(header_divider, sidebar_divider, '+')
     screen.addstr(message_divider, sidebar_divider, '+')
-
-    return header_divider, message_divider
 
 
 def box_screen(screen):
