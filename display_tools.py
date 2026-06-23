@@ -3,12 +3,12 @@ MESSAGE_HEIGHT = 4
 SIDEBAR_WIDTH = 28
 CONTENT_START_COL = 2
 HEADER_INFO_START_ROW = 1
-SIDEBAR_LINES = ["Controls",
+SIDEBAR_LINES = ["== Controls ==",
                  "W/A/S/D to move",
                  "Q to quit",
                  "R to restart",
                  "",
-                 "Legend",
+                 "== Legend ==",
                  "@: player",
                  "#: wall",
                  "K: key",
@@ -16,8 +16,15 @@ SIDEBAR_LINES = ["Controls",
                  "X: exit"]
 
 
-def build_header_text(player, level_index):
-    return f"Level {level_index + 1} | Has Key: {player.has_key} | Health: {player.health}"
+def build_sidebar_text(player):
+    sidebar_text = ["== Status ==",
+                     f"Health: {player.health}",
+                     f"Has Key: {'Yes' if player.has_key else 'No'}",
+                    ""]
+    return sidebar_text + SIDEBAR_LINES
+
+def build_header_text(level_index):
+    return f"Level {level_index + 1}"
 
 def draw_map(screen, level, player, map_start_row, map_start_col):
     for row_number, row in enumerate(level):
@@ -57,8 +64,8 @@ def calculate_layout_positions(screen):
     return layout
 
 
-def draw_header_info(screen, player, level_index, layout_positions):
-    info_text = build_header_text(player, level_index)
+def draw_header_info(screen, level_index, layout_positions):
+    info_text = build_header_text(level_index)
     screen.addstr(layout_positions["header_info_start_row"], layout_positions["header_info_start_col"], info_text)
 
 
@@ -70,17 +77,18 @@ def draw_screen(screen, level, level_index, player, message):
     layout_positions = calculate_layout_positions(screen)
     draw_layout(screen, layout_positions)
     draw_map(screen, level, player, layout_positions["map_start_row"], layout_positions["map_start_col"])
-    draw_header_info(screen, player, level_index, layout_positions)
+    draw_header_info(screen, level_index, layout_positions)
     draw_message(screen, message, layout_positions)
-    draw_sidebar(screen, layout_positions)
+    draw_sidebar(screen, player, layout_positions)
     screen.refresh()
 
 
-def draw_sidebar(screen, layout_positions):
+def draw_sidebar(screen, player, layout_positions):
+    sidebar_text = build_sidebar_text(player)
     start_row = layout_positions["sidebar_start_row"]
     start_col = layout_positions["sidebar_start_col"]
     available_lines = layout_positions["available_sidebar_lines"]
-    for line_num, line in enumerate(SIDEBAR_LINES):
+    for line_num, line in enumerate(sidebar_text):
         if line_num < available_lines:
             screen.addstr(start_row + line_num, start_col, line)
         else:
