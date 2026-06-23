@@ -2,9 +2,12 @@ INFO_TEXT = "W/A/S/D to move, Q to quit || Level "
 HEADER_HEIGHT = 4
 MESSAGE_HEIGHT = 4
 SIDEBAR_WIDTH = 28
-CONTENT_START_COL = 1
-INFO_START_ROW = 1
+CONTENT_START_COL = 2
+HEADER_INFO_START_ROW = 1
 
+
+def build_header_text(player, level_index):
+    return f"Level {level_index + 1} | Has Key: {player.has_key} | Health: {player.health}"
 
 def draw_map(screen, level, player, map_start_row, map_start_col):
     for row_number, row in enumerate(level):
@@ -35,24 +38,29 @@ def calculate_layout_positions(screen):
               "map_start_row": map_start_row,
               "map_start_col": CONTENT_START_COL,
               "message_start_row": message_row,
-              "sidebar_start_col": sidebar_start_col}
+              "message_start_col": CONTENT_START_COL,
+              "sidebar_start_row": map_start_row,
+              "sidebar_start_col": sidebar_start_col,
+              "header_info_start_row": HEADER_INFO_START_ROW,
+              "header_info_start_col": CONTENT_START_COL}
     return layout
 
 
-def draw_header_info(screen, player, level_index, info_start_row):
-    screen.addstr(info_start_row, CONTENT_START_COL, INFO_TEXT + str(level_index + 1))
-    screen.addstr(info_start_row + 1, CONTENT_START_COL, f"Has Key: {player.has_key} | Health: {player.health}")
+def draw_header_info(screen, player, level_index, layout_positions):
+    info_text = build_header_text(player, level_index)
+    screen.addstr(layout_positions["header_info_start_row"], layout_positions["header_info_start_col"], info_text)
 
-def draw_message(screen, message, message_start_row):
-    screen.addstr(message_start_row, CONTENT_START_COL, message)
+
+def draw_message(screen, message, layout_positions):
+    screen.addstr(layout_positions["message_start_row"], layout_positions["message_start_col"], message)
 
 def draw_screen(screen, level, level_index, player, message):
     screen.clear()
     layout_positions = calculate_layout_positions(screen)
     draw_layout(screen, layout_positions)
     draw_map(screen, level, player, layout_positions["map_start_row"], layout_positions["map_start_col"])
-    draw_header_info(screen, player, level_index, INFO_START_ROW)
-    draw_message(screen, message, layout_positions["message_start_row"])
+    draw_header_info(screen, player, level_index, layout_positions)
+    draw_message(screen, message, layout_positions)
     screen.refresh()
 
 
