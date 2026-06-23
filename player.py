@@ -12,6 +12,9 @@ class Player:
         if self.health < 0:
             self.health = 0
 
+    def heal(self, amount = 1):
+        self.health += amount
+
     def pick_up_key(self):
         self.has_key = True
 

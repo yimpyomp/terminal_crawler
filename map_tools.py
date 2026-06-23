@@ -73,6 +73,11 @@ def handle_tile_effect(level, player):
         level[player.row][player.col] = ' '
         message = "Took damage from enemy!"
 
+    elif tile == "+":
+        player.heal()
+        level[player.row][player.col] = ' '
+        message = "Picked up the health pack!"
+
     return level_complete, message
 
 
