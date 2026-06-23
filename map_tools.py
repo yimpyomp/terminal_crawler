@@ -39,7 +39,7 @@ def update_position(level, player, player_input):
 
     else:
         if is_door_tile(level, new_row, new_col) and in_bounds(level, new_row, new_col):
-            message = "Key required"
+            message = "Key required!"
 
     return message
 
@@ -52,12 +52,13 @@ def handle_tile_effect(level, player):
     message = ''
 
     if tile == 'K':
-        message = "Picked up the key"
+        message = "Picked up the key!"
         player.pick_up_key()
         level[player.row][player.col] = ' '
 
     elif tile == 'D' and player.has_key:
         level[player.row][player.col] = ' '
+        message = "Unlocked the door!"
 
     elif tile == 'X':
         message = "Level Complete!"
@@ -68,7 +69,7 @@ def handle_tile_effect(level, player):
         level[player.row][player.col] = ' '
 
         if not player.is_alive():
-            message = "You Died"
+            message = "You Died!"
 
         else:
             message = "Took damage from enemy"
@@ -84,7 +85,7 @@ def find_start_tile(level):
                 level[row_number][col_number] = ' '
                 return start_row, start_col
 
-    raise ValueError('No starting position found')
+    raise ValueError("No starting position found!")
 
 
 def load_level(level_template):

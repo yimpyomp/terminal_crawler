@@ -29,11 +29,11 @@ def main(screen):
 
         if player_input == 'r':
             level, player = load_level(LEVELS[level_index])
-            message = ''
+            message = f"Restarted Level {level_index + 1}!"
             continue
 
         if player_input not in MOVEMENTS:
-            message = "Invalid input"
+            message = "Invalid input!"
             continue
 
         message = update_position(level, player, player_input)
