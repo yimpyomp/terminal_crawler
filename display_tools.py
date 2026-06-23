@@ -49,7 +49,7 @@ def draw_message(screen, message, message_start_row):
 def draw_screen(screen, level, level_index, player, message):
     screen.clear()
     layout_positions = calculate_layout_positions(screen)
-    draw_layout(screen)
+    draw_layout(screen, layout_positions)
     draw_map(screen, level, player, layout_positions["map_start_row"], layout_positions["map_start_col"])
     draw_header_info(screen, player, level_index, INFO_START_ROW)
     draw_message(screen, message, layout_positions["message_start_row"])
@@ -60,30 +60,29 @@ def build_horizontal_line(width):
     return '+' + '-' * (width - 2) + '+'
 
 
-def draw_layout(screen, layout):
-
+def draw_layout(screen, layout_positions):
     # Draw box overlay
-    box_screen(screen)
+    box_screen(screen, layout_positions)
 
     # Draw horizontal dividers
-    screen.addstr(layout["header_divider"], 0, build_horizontal_line(layout["usable_width"]))
-    screen.addstr(layout["message_divider"], 0, build_horizontal_line(layout["usable_width"]))
+    screen.addstr(layout_positions["header_divider"], 0, build_horizontal_line(layout_positions["usable_width"]))
+    screen.addstr(layout_positions["message_divider"], 0, build_horizontal_line(layout_positions["usable_width"]))
 
     # Draw vertical divider
-    for row in range(HEADER_HEIGHT, layout["message_divider"]):
-        screen.addstr(row, layout["sidebar_divider"], '|')
+    for row in range(HEADER_HEIGHT, layout_positions["message_divider"]):
+        screen.addstr(row, layout_positions["sidebar_divider"], '|')
 
     # Add the corner pieces for the sidebar
-    screen.addstr(layout["header_divider"], layout["sidebar_divider"], '+')
-    screen.addstr(layout["message_divider"], layout["sidebar_divider"], '+')
+    screen.addstr(layout_positions["header_divider"], layout_positions["sidebar_divider"], '+')
+    screen.addstr(layout_positions["message_divider"], layout_positions["sidebar_divider"], '+')
 
 
-def box_screen(screen, layout):
-    horizontal_border = '+' + '-' * (layout["usable_width"] - 2) + '+'
+def box_screen(screen, layout_positions):
+    horizontal_border = '+' + '-' * (layout_positions["usable_width"] - 2) + '+'
     screen.addstr(0, 0, horizontal_border)
 
-    side_border = '|' + ' ' * (layout["usable_width"] - 2) + '|'
-    for row in range(1, layout["height"] - 1):
+    side_border = '|' + ' ' * (layout_positions["usable_width"] - 2) + '|'
+    for row in range(1, layout_positions["height"] - 1):
         screen.addstr(row, 0, side_border)
 
-    screen.addstr(layout["height"] - 1, 0, horizontal_border)
+    screen.addstr(layout_positions["height"] - 1, 0, horizontal_border)
