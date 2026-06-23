@@ -4,7 +4,7 @@ MESSAGE_HEIGHT = 4
 SIDEBAR_WIDTH = 28
 
 
-def draw_map(screen, level, player):
+def draw_map(screen, level, player, header_divider):
     for row_number, row in enumerate(level):
         display_line = ''
         for col_number, tile in enumerate(row):
@@ -12,22 +12,20 @@ def draw_map(screen, level, player):
                 display_line += '@'
             else:
                 display_line += tile
-        screen.addstr(row_number, 0, display_line)
+        screen.addstr(header_divider + row_number + 1, 1, display_line)
 
 
-def display_info(screen, player, level, level_index, message):
-    info_display_row = len(level) + 1
-    player_display_row = info_display_row + 1
-    screen.addstr(info_display_row, 0 ,INFO_TEXT + str(level_index + 1))
-    screen.addstr(player_display_row, 0, f"Has Key: {player.has_key} | Health: {player.health}")
-    screen.addstr(player_display_row + 1, 0, message)
+def display_info(screen, player, level_index, message, message_divider):
+    screen.addstr(1, 1,INFO_TEXT + str(level_index + 1))
+    screen.addstr(2, 1, f"Has Key: {player.has_key} | Health: {player.health}")
+    screen.addstr(message_divider + 1, 1, message)
 
 
 def draw_screen(screen, level, level_index, player, message):
     screen.clear()
-    draw_layout(screen)
-    draw_map(screen, level, player)
-    display_info(screen, player, level, level_index, message)
+    header_divider, message_divider = draw_layout(screen)
+    draw_map(screen, level, player, header_divider)
+    display_info(screen, player, level_index, message, message_divider)
     screen.refresh()
 
 
@@ -58,6 +56,8 @@ def draw_layout(screen):
     # Add the corner pieces for the sidebar
     screen.addstr(header_divider, sidebar_divider, '+')
     screen.addstr(message_divider, sidebar_divider, '+')
+
+    return header_divider, message_divider
 
 
 def box_screen(screen):
