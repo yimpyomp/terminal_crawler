@@ -135,3 +135,13 @@ def box_screen(screen, layout_positions):
         screen.addstr(row, 0, side_border)
 
     screen.addstr(layout_positions["height"] - 1, 0, horizontal_border)
+
+
+def draw_title_screen(screen, layout_positions):
+    box_screen(screen, layout_positions)
+
+    screen.addstr(2, 4, "Terminal Crawler")
+    screen.addstr(3, 4, "Press any key to start")
+
+    screen.refresh()
+    screen.getch()

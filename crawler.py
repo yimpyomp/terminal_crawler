@@ -2,15 +2,20 @@ import curses
 
 from levels import LEVELS
 from map_tools import update_position, handle_tile_effect, load_level, MOVEMENTS
-from display_tools import draw_screen
+from display_tools import draw_screen, draw_title_screen, calculate_layout_positions
 
 
 def main(screen):
     curses.curs_set(0)
+
+    layout_positions = calculate_layout_positions(screen)
+    draw_title_screen(screen, layout_positions)
+
     level_index = 0
     level = LEVELS[level_index]
     level, player = load_level(level)
     message = ''
+
 
     while True:
         draw_screen(screen, level, level_index, player, message)
