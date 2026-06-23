@@ -24,11 +24,13 @@ def build_sidebar_text(player):
     sidebar_lines = ["== Status ==",
                      f"Health: {player.health}",
                      f"Has Key: {'Yes' if player.has_key else 'No'}",
-                    ""]
+                     ""]
     return sidebar_lines + STATIC_SIDEBAR_LINES
+
 
 def build_header_text(level_index):
     return f"Level {level_index + 1}"
+
 
 def draw_map(screen, level, player, map_start_row, map_start_col):
     for row_number, row in enumerate(level):
@@ -80,6 +82,7 @@ def draw_message(screen, message, layout_positions):
         display_message = message
     screen.addstr(layout_positions["message_start_row"], layout_positions["message_start_col"], display_message)
 
+
 def draw_screen(screen, level, level_index, player, message):
     screen.clear()
     layout_positions = calculate_layout_positions(screen)
@@ -102,7 +105,6 @@ def draw_sidebar(screen, player, layout_positions):
         else:
             draw_message(screen, "Sidebar line limit exceeded!", layout_positions)
             break
-
 
 
 def build_horizontal_line(width):
