@@ -4,20 +4,20 @@ SIDEBAR_WIDTH = 28
 CONTENT_START_COL = 2
 HEADER_INFO_START_ROW = 1
 STATIC_SIDEBAR_LINES = ["== Controls ==",
-                 "W/A/S/D to move",
-                 "Q to quit",
-                 "R to restart",
-                 "",
-                 "== Legend ==",
-                 "@: player",
-                 "#: wall",
-                 "K: key",
-                 "E: Enemy",
-                 "^: Spike Trap",
-                 "~: Tripwire",
-                 "+: Health Pickup",
-                 "D: door",
-                 "X: exit"]
+                        "W/A/S/D to move",
+                        "Q to quit",
+                        "R to restart",
+                        "",
+                        "== Legend ==",
+                        "@: player",
+                        "#: wall",
+                        "K: key",
+                        "E: Enemy",
+                        "^: Spike Trap",
+                        "~: Tripwire",
+                        "+: Health Pickup",
+                        "D: door",
+                        "X: exit"]
 
 
 def build_sidebar_text(player):
