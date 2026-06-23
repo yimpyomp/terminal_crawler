@@ -1,6 +1,5 @@
 import curses
 
-from player import Player
 from levels import LEVELS
 from map_tools import update_position, handle_tile_effect, load_level, MOVEMENTS
 from display_tools import draw_screen
