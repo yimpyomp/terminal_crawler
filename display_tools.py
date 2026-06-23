@@ -3,7 +3,7 @@ MESSAGE_HEIGHT = 4
 SIDEBAR_WIDTH = 28
 CONTENT_START_COL = 2
 HEADER_INFO_START_ROW = 1
-SIDEBAR_LINES = ["== Controls ==",
+STATIC_SIDEBAR_LINES = ["== Controls ==",
                  "W/A/S/D to move",
                  "Q to quit",
                  "R to restart",
@@ -17,11 +17,11 @@ SIDEBAR_LINES = ["== Controls ==",
 
 
 def build_sidebar_text(player):
-    sidebar_text = ["== Status ==",
+    sidebar_lines = ["== Status ==",
                      f"Health: {player.health}",
                      f"Has Key: {'Yes' if player.has_key else 'No'}",
                     ""]
-    return sidebar_text + SIDEBAR_LINES
+    return sidebar_lines + STATIC_SIDEBAR_LINES
 
 def build_header_text(level_index):
     return f"Level {level_index + 1}"
@@ -70,7 +70,11 @@ def draw_header_info(screen, level_index, layout_positions):
 
 
 def draw_message(screen, message, layout_positions):
-    screen.addstr(layout_positions["message_start_row"], layout_positions["message_start_col"], message)
+    if message:
+        display_message = f"> {message}"
+    else:
+        display_message = message
+    screen.addstr(layout_positions["message_start_row"], layout_positions["message_start_col"], display_message)
 
 def draw_screen(screen, level, level_index, player, message):
     screen.clear()
