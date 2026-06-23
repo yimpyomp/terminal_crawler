@@ -37,7 +37,7 @@ def calculate_layout_positions(screen):
     message_divider = height - MESSAGE_HEIGHT
     sidebar_divider = usable_width - SIDEBAR_WIDTH
     map_start_row = header_divider + 1
-    message_row = message_divider + 1
+    message_start_row = message_divider + 1
     sidebar_start_col = sidebar_divider + 2
     layout = {"height": height,
               "width": width,
@@ -47,7 +47,7 @@ def calculate_layout_positions(screen):
               "sidebar_divider": sidebar_divider,
               "map_start_row": map_start_row,
               "map_start_col": CONTENT_START_COL,
-              "message_start_row": message_row,
+              "message_start_row": message_start_row,
               "message_start_col": CONTENT_START_COL,
               "sidebar_start_row": map_start_row,
               "sidebar_start_col": sidebar_start_col,
@@ -79,9 +79,9 @@ def draw_screen(screen, level, level_index, player, message):
 def draw_sidebar(screen, layout_positions):
     start_row = layout_positions["sidebar_start_row"]
     start_col = layout_positions["sidebar_start_col"]
-    line_limit = layout_positions["available_sidebar_lines"]
+    available_lines = layout_positions["available_sidebar_lines"]
     for line_num, line in enumerate(SIDEBAR_LINES):
-        if line_num < line_limit:
+        if line_num < available_lines:
             screen.addstr(start_row + line_num, start_col, line)
         else:
             draw_message(screen, "Sidebar line limit exceeded!", layout_positions)
