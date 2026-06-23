@@ -1,10 +1,19 @@
-CONTROL_TEXT = "W/A/S/D to move"
-GAMEPLAY_TEXT = "Q to quit, R to restart"
 HEADER_HEIGHT = 4
 MESSAGE_HEIGHT = 4
 SIDEBAR_WIDTH = 28
 CONTENT_START_COL = 2
 HEADER_INFO_START_ROW = 1
+SIDEBAR_LINES = ["Controls",
+                 "W/A/S/D to move",
+                 "Q to quit",
+                 "R to restart",
+                 "",
+                 "Legend",
+                 "@: player",
+                 "#: wall",
+                 "K: key",
+                 "D: door",
+                 "X: exit"]
 
 
 def build_header_text(player, level_index):
@@ -43,7 +52,8 @@ def calculate_layout_positions(screen):
               "sidebar_start_row": map_start_row,
               "sidebar_start_col": sidebar_start_col,
               "header_info_start_row": HEADER_INFO_START_ROW,
-              "header_info_start_col": CONTENT_START_COL}
+              "header_info_start_col": CONTENT_START_COL,
+              "available_sidebar_lines": message_divider - map_start_row}
     return layout
 
 
@@ -67,8 +77,16 @@ def draw_screen(screen, level, level_index, player, message):
 
 
 def draw_sidebar(screen, layout_positions):
-    screen.addstr(layout_positions['sidebar_start_row'], layout_positions['sidebar_start_col'], CONTROL_TEXT)
-    screen.addstr(layout_positions['sidebar_start_row'] + 1, layout_positions['sidebar_start_col'], GAMEPLAY_TEXT)
+    start_row = layout_positions["sidebar_start_row"]
+    start_col = layout_positions["sidebar_start_col"]
+    line_limit = layout_positions["available_sidebar_lines"]
+    for line_num, line in enumerate(SIDEBAR_LINES):
+        if line_num < line_limit:
+            screen.addstr(start_row + line_num, start_col, line)
+        else:
+            draw_message(screen, "Sidebar line limit exceeded!", layout_positions)
+            break
+
 
 
 def build_horizontal_line(width):
