@@ -100,5 +100,5 @@ def find_start_tile(level):
 def load_level(level_template):
     level = [list(row) for row in level_template]
     start_row, start_col = find_start_tile(level)
-    player = Player(row=start_row, col=start_col, health=10)
+    player = Player(row=start_row, col=start_col, health=1)
     return level, player

@@ -147,3 +147,12 @@ def draw_title_screen(screen, layout_positions):
 
     screen.refresh()
     screen.getch()
+
+
+def draw_death_screen(screen, layout_positions):
+    screen.clear()
+    box_screen(screen, layout_positions)
+
+    screen.addstr(2, 4, "You Died!")
+    screen.addstr(3, 4, "Press R to restart the level, press q to quit")
+    screen.refresh()

@@ -2,7 +2,7 @@ import curses
 
 from levels import LEVELS
 from map_tools import update_position, handle_tile_effect, load_level, MOVEMENTS
-from display_tools import draw_screen, draw_title_screen, calculate_layout_positions
+from display_tools import draw_screen, draw_title_screen, calculate_layout_positions, draw_death_screen
 
 
 def main(screen):
@@ -18,6 +18,27 @@ def main(screen):
 
 
     while True:
+        if not player.is_alive():
+            draw_death_screen(screen, layout_positions)
+
+            key = screen.getch()
+
+            try:
+                player_input = chr(key).lower()
+            except ValueError:
+                message = "Invalid input"
+                continue
+
+            if player_input == 'q':
+                break
+
+            if player_input == 'r':
+                level, player = load_level(LEVELS[level_index])
+                message = f"Restarted Level {level_index + 1}!"
+                continue
+
+            continue
+
         draw_screen(screen, level, level_index, player, message)
 
         key = screen.getch()
@@ -37,19 +58,14 @@ def main(screen):
             message = f"Restarted Level {level_index + 1}!"
             continue
 
-        if player_input not in MOVEMENTS:
-            message = "Invalid input!"
+        try:
+            message = update_position(level, player, player_input)
+            level_complete, tile_message = handle_tile_effect(level, player)
+        except KeyError:
             continue
-
-        message = update_position(level, player, player_input)
-        level_complete, tile_message = handle_tile_effect(level, player)
 
         if tile_message != '':
             message = tile_message
-
-        if not player.is_alive():
-            message = "You Died! Press Q to Quit or R to Restart"
-            continue
 
         if level_complete:
             level_index += 1
